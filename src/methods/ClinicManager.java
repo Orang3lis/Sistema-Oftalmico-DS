@@ -15,11 +15,9 @@ import objects.Empleado;
 import objects.Paciente;
 
 public class ClinicManager {
-    
+
     private Map<String, Doctor> doctoresPorId;
     private Map<String, Empleado> empleadosPorId;
-
-    
     private Map<String, Paciente> pacientesPorId;
     private Queue<Paciente> filaEsperaNormal;
     private PriorityQueue<Paciente> filaEmergencias;
@@ -31,12 +29,14 @@ public class ClinicManager {
         this.empleadosPorId = new HashMap<>();
         this.pacientesPorId = new HashMap<>();
         this.filaEsperaNormal = new LinkedList<>();
-        this.filaEmergencias = new PriorityQueue<>((p1, p2) -> Integer.compare(p2.getPrioridad(), p1.getPrioridad()));
+        this.filaEmergencias = new PriorityQueue<>(
+            (p1, p2) -> Integer.compare(p2.getPrioridad(), p1.getPrioridad())
+        );
         this.citasProgramadas = new ArrayList<>();
         this.citasCompletadasRecientes = new Stack<>();
     }
 
-//Anelis
+    // Anelis
 
     public boolean registrarEmpleado(Empleado empleado) {
         if (empleado == null || empleado.getId() == null || empleado.getId().isBlank()) {
@@ -106,14 +106,42 @@ public class ClinicManager {
     }
 
     // ==========================================
-    // BLOQUE 2: PACIENTES Y FILAS (COMPANERO/A 2)
+    // BLOQUE 2: PACIENTES Y FILAS
     // ==========================================
-    // TODO:
-    // - registrarPaciente(Paciente paciente) evitando duplicados
-    // - buscarPacientePorId(String id)
-    // - agregarAFilaEspera(Paciente paciente)
-    // - verFilaEspera()
-    // - atenderEmergencia() [Bono]
+
+    public boolean registrarPaciente(Paciente paciente) {
+        if (paciente == null || paciente.getId() == null || paciente.getId().isBlank()) {
+            return false;
+        }
+        return pacientesPorId.putIfAbsent(paciente.getId(), paciente) == null;
+    }
+
+    public Paciente buscarPacientePorId(String id) {
+        return pacientesPorId.get(id);
+    }
+
+    public boolean agregarAFilaEspera(Paciente paciente) {
+        Paciente registrado = paciente == null ? null : buscarPacientePorId(paciente.getId());
+        return registrado != null && filaEsperaNormal.offer(registrado);
+    }
+
+    public List<Paciente> verFilaEspera() {
+        // Copia la fila para que el menú pueda mostrarla sin modificarla.
+        return new ArrayList<>(filaEsperaNormal);
+    }
+
+    public Paciente atenderSiguientePaciente() {
+        return filaEsperaNormal.poll();
+    }
+
+    public boolean agregarAFilaEmergencias(Paciente paciente) {
+        Paciente registrado = paciente == null ? null : buscarPacientePorId(paciente.getId());
+        return registrado != null && filaEmergencias.offer(registrado);
+    }
+
+    public Paciente atenderEmergencia() {
+        return filaEmergencias.poll();
+    }
 
     // ==========================================
     // BLOQUE 3: CITAS E HISTORIAL (COMPANERO/A 3)

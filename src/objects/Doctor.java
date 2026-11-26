@@ -2,7 +2,7 @@ package objects;
 
 public class Doctor {
 
-//Anelis
+    // Anelis
     private String id;
     private String nombre;
     private String especialidad;
@@ -15,23 +15,23 @@ public class Doctor {
         this.disponible = disponible;
     }
 
-    //GETTERS
-    public String getId() {return id;}
-    
-    public String getNombre() {return nombre;}
+    // GETTERS
+    public String getId() { return id; }
 
-    public String getEspecialidad() {return especialidad;}
+    public String getNombre() { return nombre; }
 
-    public boolean isDisponible() {return disponible;}
+    public String getEspecialidad() { return especialidad; }
 
-    //SETTERS
-    public String setId(String id) {this.id = id;}
-    
-    public String setNombre(String nombre) {this.nombre = nombre;}
+    public boolean isDisponible() { return disponible; }
 
-    public String setEspecialidad(String especialidad) {this.especialidad = especialidad;}
+    // SETTERS
+    public void setId(String id) { this.id = id; }
 
-    public boolean setDisponible(boolean disponible) {this.disponible = disponible;}
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public void setEspecialidad(String especialidad) { this.especialidad = especialidad; }
+
+    public void setDisponible(boolean disponible) { this.disponible = disponible; }
 
     @Override
     public String toString() {
