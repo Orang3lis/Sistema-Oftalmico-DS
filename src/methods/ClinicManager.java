@@ -23,6 +23,7 @@ public class ClinicManager {
     private PriorityQueue<Paciente> filaEmergencias;
     private List<Cita> citasProgramadas;
     private Stack<Cita> citasCompletadasRecientes;
+    private Map<String, String> doctorPorPacienteAsignado;
 
     public ClinicManager() {
         this.doctoresPorId = new HashMap<>();
@@ -34,6 +35,7 @@ public class ClinicManager {
         );
         this.citasProgramadas = new ArrayList<>();
         this.citasCompletadasRecientes = new Stack<>();
+        this.doctorPorPacienteAsignado = new HashMap<>();
     }
 
     // Anelis
@@ -153,4 +155,161 @@ public class ClinicManager {
     // - asignarPacienteADoctor(String idPaciente, String idDoctor)
     // - registrarVisita(String idCita, String signosVitales, String notas)
     // - verHistorialClinico(String idPaciente) y verCitasCompletadasRecientes()
+
+    public Cita buscarCitaPorId(String idCita) {
+        if (idCita == null || idCita.isBlank()) {
+            return null;
+        }
+        for (Cita cita : citasProgramadas) {
+            if (cita.getIdCita().equals(idCita)) {
+                return cita;
+            }
+        }
+        return null;
+    }
+
+    public boolean concertarCita(Cita cita) {
+        if (cita == null || cita.getIdCita() == null || cita.getIdCita().isBlank()) {
+            return false; // Validación básica de la cita y su ID
+        }
+        if (buscarCitaPorId(cita.getIdCita()) != null) {
+            return false;  // Evita duplicaciones por ID
+        }
+        if (buscarPacientePorId(cita.getIdPaciente()) == null) {
+            return false;  // Verifica que el paciente exista
+        }
+        if (buscarDoctorPorId(cita.getIdDoctor()) == null) {
+            return false;  // Verifica que el doctor exista
+        }
+        if(cita.getFechaHora() == null || cita.getFechaHora().isBlank()) {
+            return false;  // Verifica que tenga fecha y hora 
+        }
+
+        for (Cita existente : citasProgramadas) {
+            if (!"Cancelada".equals(existente.getEstado()) && 
+            cita.getFechaHora().equals(existente.getFechaHora()) &&
+            (cita.getIdDoctor().equals(existente.getIdDoctor()) || 
+             cita.getIdPaciente().equals(existente.getIdPaciente()))) {
+                return false; 
+            }
+        } // Evita citas simultaneas para un mismo doctor o paciente
+        cita.setEstado("Programada");
+        citasProgramadas.add(cita);
+        return true;
+    }
+
+    public boolean cancelarCita(String idCita) {
+        Cita cita = buscarCitaPorId(idCita);
+
+        if (cita == null) {
+            return false; // cita no existe 
+        }
+        if (!"Programada".equalsIgnoreCase(cita.getEstado())) {
+            return false; // no se puede cancelar            
+        }
+        cita.setEstado("Cancelada");
+        return true;
+    }
+
+    public List<Cita> verCitasDeHoy(String fechaHoy) {
+        List<Cita> resultados = new ArrayList<>();
+
+        if (fechaHoy == null || fechaHoy.isBlank()) {
+            return resultados; // fecha invalida
+        } 
+
+        for (Cita cita: citasProgramadas) {
+            if (cita.getFechaHora() != null &&
+                cita.getFechaHora().startsWith(fechaHoy) &&
+                "Programada".equalsIgnoreCase(cita.getEstado())) {
+                resultados.add(cita);
+            }
+        }
+        return resultados;
+    }
+
+    public boolean asignarPacienteADoctor(String idPaciente, String idDoctor) {
+        Paciente paciente = buscarPacientePorId(idPaciente);
+        Doctor doctor = buscarDoctorPorId(idDoctor);
+
+        if (paciente == null || doctor == null) {
+            return false; // paciente o doctor no existen
+        }
+        if (!doctor.isDisponible()) {
+            return false; // doctor no disponible
+        }
+        if (doctorPorPacienteAsignado.containsKey(idPaciente)) {
+            return false; //paciente ya tiene doctor asignado
+        }
+
+        doctorPorPacienteAsignado.put(idPaciente, idDoctor);
+        doctor.setDisponible(false); 
+        return true;
+    }    
+
+    public boolean registrarVisita(String idCita, String signosVitales, String notas) {
+        Cita cita = buscarCitaPorId(idCita);
+
+        if (cita == null) {
+            return false; // cita no existe
+        }
+        if (!"Programada".equalsIgnoreCase(cita.getEstado())) {
+            return false; // cita no esta programada
+        }   
+
+        Paciente paciente = buscarPacientePorId(cita.getIdPaciente());
+        Doctor doctor = buscarDoctorPorId(cita.getIdDoctor());
+
+        if (paciente == null || doctor == null) {
+            return false; // paciente o doctor no existen
+        }
+        if (signosVitales == null || signosVitales.isBlank() || notas == null) {
+            return false; // signos vitales o notas invalidas
+        }
+        if (!cita.getIdDoctor().equals(doctorPorPacienteAsignado.get(cita.getIdPaciente()))) {
+            return false; // paciente no asignado a este doctor
+        }
+
+        cita.setSignosVitales(signosVitales);
+        cita.setNotasVisita(notas);
+        cita.setEstado("Completada");
+
+        String visita = "Cita: " + cita.getIdCita() + 
+                        " | Fecha: " + cita.getFechaHora() +
+                        " | Doctor: " + cita.getIdDoctor() +
+                        " | Signos Vitales: " + signosVitales +
+                        " | Notas: " + notas;
+
+        paciente.agregarVisitaHistorial(visita); 
+        citasCompletadasRecientes.push(cita);
+        doctorPorPacienteAsignado.remove(cita.getIdPaciente());
+        doctor.setDisponible(true);
+        return true;
+
+    }
+
+    public List<String> verHistorialClinico(String idPaciente) {
+        List<String> resultados = new ArrayList<>();
+        Paciente paciente = buscarPacientePorId(idPaciente);
+
+        if (paciente == null) {
+            return resultados; // paciente no existe
+        }
+
+        List<String> historial = paciente.getHistorialClinico();
+
+        for (int i = historial.size() - 1; i >= 0; i--) {
+            resultados.add(historial.get(i));
+        }
+        return resultados;
+    }
+
+    public List<Cita> verCitasCompletadasRecientes() {
+        List<Cita> resultados = new ArrayList<>();
+
+        for (int i = citasCompletadasRecientes.size() - 1; i >= 0; i--) {
+            resultados.add(citasCompletadasRecientes.get(i));
+        }
+        return resultados;
+    }
 }

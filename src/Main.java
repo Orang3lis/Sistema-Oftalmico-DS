@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> 8585a9faa9a9219d4963234f161423aa5281760a
 import java.util.Scanner;
 import methods.ClinicManager;
 import objects.Paciente;
@@ -18,7 +21,11 @@ public class Main {
 
         do {
             mostrarMenu();
+<<<<<<< HEAD
             System.out.print("Seleccione una opcion: ");
+=======
+            System.out.print("Seleccione una opción: ");
+>>>>>>> 8585a9faa9a9219d4963234f161423aa5281760a
             option = scanner.nextLine();
 
             switch (option) {
@@ -372,5 +379,9 @@ public class Main {
 
         System.out.println("================================");
     }
+<<<<<<< HEAD
 }
 >>>>>>> Stashed changes
+=======
+}
+>>>>>>> 8585a9faa9a9219d4963234f161423aa5281760a
