@@ -1,4 +1,5 @@
 1. Título del proyecto
+
 Sistema de Gestión para Clínica Oftálmica
 
 2. Descripción
@@ -54,14 +55,22 @@ Ejemplo de flujo interactivo en consola:
 1. Registrar empleado
 2. Buscar empleado
 3. Agregar doctor
-...
+4. Eliminar doctor
+5. Buscar doctor por ID
+6. Buscar doctores por especialidad
+7. Ver doctores disponibles
+8. Registrar paciente
+9. Buscar paciente
 10. Agregar paciente a fila de espera
 11. Ver fila de espera
 12. Atender siguiente paciente
 13. Agregar paciente a emergencias
 14. Atender emergencia
 15. Concertar cita
-...
+16. Cancelar cita
+17. Ver citas de hoy
+18. Asignar paciente a doctor
+19. Registrar visita
 20. Ver historial clinico
 21. Ver citas completadas recientes
 0. Salir
