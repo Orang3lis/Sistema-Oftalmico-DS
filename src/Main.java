@@ -1,14 +1,9 @@
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> 8585a9faa9a9219d4963234f161423aa5281760a
 import java.util.Scanner;
 import methods.ClinicManager;
-import objects.Paciente;
+import objects.Cita;
 import objects.Doctor;
 import objects.Empleado;
-import objects.Cita;
+import objects.Paciente;
 
 public class Main {
 
@@ -21,11 +16,7 @@ public class Main {
 
         do {
             mostrarMenu();
-<<<<<<< HEAD
             System.out.print("Seleccione una opcion: ");
-=======
-            System.out.print("Seleccione una opción: ");
->>>>>>> 8585a9faa9a9219d4963234f161423aa5281760a
             option = scanner.nextLine();
 
             switch (option) {
@@ -49,7 +40,7 @@ public class Main {
                     }
                     break;
                 }
-                
+
                 case "2": {
                     System.out.print("ID del empleado: ");
                     String id = scanner.nextLine();
@@ -65,7 +56,7 @@ public class Main {
                     break;
                 }
 
-                case "3":{
+                case "3": {
                     System.out.print("ID del doctor: ");
                     String id = scanner.nextLine();
 
@@ -87,7 +78,7 @@ public class Main {
                     break;
                 }
 
-                case "4":{
+                case "4": {
                     System.out.print("ID del doctor: ");
                     String id = scanner.nextLine();
 
@@ -142,6 +133,7 @@ public class Main {
                         prioridad = Integer.parseInt(scanner.nextLine());
                     } catch (NumberFormatException e) {
                         System.out.println("Prioridad invalida.");
+                        System.out.println("================================");
                         break;
                     }
 
@@ -158,18 +150,18 @@ public class Main {
                 }
 
                 case "9": {
-                        System.out.print("ID del paciente: ");
-                        String id = scanner.nextLine();
+                    System.out.print("ID del paciente: ");
+                    String id = scanner.nextLine();
 
-                        Paciente paciente = manager.buscarPacientePorId(id);
+                    Paciente paciente = manager.buscarPacientePorId(id);
 
-                        if (paciente != null) {
-                            System.out.println(paciente);
-                        } else {
-                            System.out.println("Paciente no encontrado.");
-                            System.out.println("================================");
-                        }
-                        break;
+                    if (paciente != null) {
+                        System.out.println(paciente);
+                    } else {
+                        System.out.println("Paciente no encontrado.");
+                        System.out.println("================================");
+                    }
+                    break;
                 }
 
                 case "10": {
@@ -298,7 +290,7 @@ public class Main {
                         System.out.println("================================");
                     }
                     break;
-                }    
+                }
 
                 case "19": {
                     System.out.print("ID de la cita: ");
@@ -352,7 +344,7 @@ public class Main {
     public static void mostrarMenu() {
 
         System.out.println("================================");
-        System.out.println("=== Clínica Oftálmica ===");
+        System.out.println("=== Clinica Oftalmica ===");
         System.out.println("================================");
         System.out.println("1. Registrar empleado");
         System.out.println("2. Buscar empleado");
@@ -379,9 +371,4 @@ public class Main {
 
         System.out.println("================================");
     }
-<<<<<<< HEAD
 }
->>>>>>> Stashed changes
-=======
-}
->>>>>>> 8585a9faa9a9219d4963234f161423aa5281760a

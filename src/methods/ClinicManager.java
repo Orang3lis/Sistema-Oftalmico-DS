@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
-
 import objects.Cita;
 import objects.Doctor;
 import objects.Empleado;
@@ -107,9 +106,7 @@ public class ClinicManager {
         return disponibles;
     }
 
-    // ==========================================
-    // BLOQUE 2: PACIENTES Y FILAS
-    // ==========================================
+    // Dereck
 
     public boolean registrarPaciente(Paciente paciente) {
         if (paciente == null || paciente.getId() == null || paciente.getId().isBlank()) {
@@ -145,16 +142,7 @@ public class ClinicManager {
         return filaEmergencias.poll();
     }
 
-    // ==========================================
-    // BLOQUE 3: CITAS E HISTORIAL (COMPANERO/A 3)
-    // ==========================================
-    // TODO:
-    // - concertarCita(Cita cita)
-    // - cancelarCita(String idCita)
-    // - verCitasDeHoy(String fechaHoy)
-    // - asignarPacienteADoctor(String idPaciente, String idDoctor)
-    // - registrarVisita(String idCita, String signosVitales, String notas)
-    // - verHistorialClinico(String idPaciente) y verCitasCompletadasRecientes()
+    //Xoralys
 
     public Cita buscarCitaPorId(String idCita) {
         if (idCita == null || idCita.isBlank()) {
